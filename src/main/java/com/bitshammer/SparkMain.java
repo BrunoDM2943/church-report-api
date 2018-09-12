@@ -1,5 +1,7 @@
 package  com.bitshammer;
 
+import com.bitshammer.reports.ReportsController;
+
 import static spark.Spark.get;
 import static spark.Spark.port;
 
@@ -11,7 +13,10 @@ public class SparkMain {
         if (processBuilder.environment().get("PORT") != null)
             port = Integer.parseInt(processBuilder.environment().get("PORT"));
 
+        ReportsController reportsController = new ReportsController();
         port(port);
         get("/ping", (req, res) -> "pong");
+        get("/reports/juridico", reportsController::juridico);
+
     }
 }
