@@ -1,12 +1,9 @@
 package com.bitshammer.reports;
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,11 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
 import net.sf.jasperreports.engine.JRDataSource;
-import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -84,33 +77,6 @@ public class ReportsController {
         outputStream.close();
         System.out.println("Done!");
         return res.raw();
-    }
-
-    @Builder
-    @Data
-    @Getter
-    private static class MembroReportDTO {
-        private String nome;
-        private String endereco;
-        private String dtNascimento;
-        private String dtCasamento;
-        private String telefone;
-        private String celular;
-        private String email;
-        private String classificacao;
-
-        public static String obterClassificao(LocalDate dtNascimento){
-            long idade = dtNascimento.until(LocalDate.now(), ChronoUnit.YEARS);
-            if(idade < 15){
-                return "Criança";
-            } else if(idade < 30){
-                return "Jovem";
-            } else {
-                return "Adulto";
-            }
-        }
-
-
     }
 
 }
