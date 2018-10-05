@@ -39,6 +39,7 @@ public class RestCall {
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
         conn.setRequestProperty("Accept", "application/json");
+        conn.setRequestProperty("X-Token", System.getenv("CHURCH_MEMBERS_ACCESS_TOKEN"));
 
         if (conn.getResponseCode() != 200) {
             throw new RuntimeException("Failed : HTTP error code : "
