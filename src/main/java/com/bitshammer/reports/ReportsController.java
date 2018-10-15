@@ -22,9 +22,24 @@ public class ReportsController {
     @Inject
     private JasperService jasperService;
 
+    @Inject
+    private ReportsService reportsService;
+
     public HttpServletResponse juridico(Request req, Response res) throws Exception {
         List<MembroReportDTO> membros = churchMembersAPI.getMembers();
         byte[] report = jasperService.generateReport("reports/juridica.jrxml", membros);
+        ServletOutputStream outputStream = res.raw().getOutputStream();
+        res.raw().setContentType("application/octet-stream");
+        res.raw().setHeader("Content-Disposition","attachment; filename=relatorioMembros.pdf");
+        res.raw().getOutputStream().write(report);
+        outputStream.flush();
+        outputStream.close();
+        return res.raw();
+    }
+
+    public HttpServletResponse nascimento(Request req, Response res) throws Exception {
+        List<MembroReportDTO> membros = churchMembersAPI.getMembers();
+        byte[] report = reportsService.generateListaAniversariantes(membros);
         ServletOutputStream outputStream = res.raw().getOutputStream();
         res.raw().setContentType("application/octet-stream");
         res.raw().setHeader("Content-Disposition","attachment; filename=relatorioMembros.pdf");

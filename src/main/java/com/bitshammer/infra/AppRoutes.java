@@ -24,5 +24,6 @@ public class AppRoutes {
     public void setUpRoutes() {
         before(jwtFilter::validateToken);
         get("/reports/juridico", reportsController::juridico);
+        get("/reports/aniversariantes/nascimento", reportsController::nascimento);
     }
 }
