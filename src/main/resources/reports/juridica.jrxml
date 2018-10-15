@@ -65,14 +65,14 @@
     <field name="nome" class="java.lang.String">
         <fieldDescription><![CDATA[nome]]></fieldDescription>
     </field>
-    <field name="dtNascimento" class="java.lang.String">
-        <fieldDescription><![CDATA[dtNascimento]]></fieldDescription>
+    <field name="dtNascimentoFmt" class="java.lang.String">
+        <fieldDescription><![CDATA[dtNascimentoFmt]]></fieldDescription>
     </field>
     <field name="email" class="java.lang.String">
         <fieldDescription><![CDATA[email]]></fieldDescription>
     </field>
-    <field name="dtCasamento" class="java.lang.String">
-        <fieldDescription><![CDATA[dtCasamento]]></fieldDescription>
+    <field name="dtCasamentoFmt" class="java.lang.String">
+        <fieldDescription><![CDATA[dtCasamentoFmt]]></fieldDescription>
     </field>
     <background>
         <band splitType="Stretch"/>
@@ -121,11 +121,11 @@
             </textField>
             <textField pattern="dd/MM/yy" isBlankWhenNull="true">
                 <reportElement x="110" y="66" width="110" height="24" uuid="0fc02bbc-49a2-4e26-81c1-15031323e28e"/>
-                <textFieldExpression><![CDATA[$F{dtNascimento}]]></textFieldExpression>
+                <textFieldExpression><![CDATA[$F{dtNascimentoFmt}]]></textFieldExpression>
             </textField>
             <textField pattern="dd/MM/yy" isBlankWhenNull="true">
                 <reportElement x="324" y="66" width="196" height="24" uuid="ab5f1acd-282a-48dd-8705-d09440ad2c77"/>
-                <textFieldExpression><![CDATA[$F{dtCasamento}]]></textFieldExpression>
+                <textFieldExpression><![CDATA[$F{dtCasamentoFmt}]]></textFieldExpression>
             </textField>
             <staticText>
                 <reportElement x="50" y="10" width="60" height="18" uuid="a0d325e4-bec6-484e-903a-148533ea1808"/>

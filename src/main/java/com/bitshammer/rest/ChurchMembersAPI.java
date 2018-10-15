@@ -3,11 +3,10 @@ package com.bitshammer.rest;
 import com.bitshammer.infra.RestCall;
 import com.bitshammer.model.MembroReportDTO;
 import com.google.gson.*;
-import com.google.gson.reflect.TypeToken;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.text.DateFormat;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -68,11 +67,11 @@ public class ChurchMembersAPI {
         return String.format("%s %s", pessoa.get("nome").getAsString(), pessoa.get("sobrenome").getAsString());
     }
 
-    private String getDate(String date){
+    private LocalDate getDate(String date){
         if("0001-01-01T00:00:00Z".equalsIgnoreCase(date)){
             return null;
         }
-        return DateTimeFormatter.ofPattern("dd/MM/yyyy").format(DateTimeFormatter.ISO_DATE_TIME.parse(date));
+        return LocalDate.from(DateTimeFormatter.ISO_DATE_TIME.parse(date));
     }
 
     private String getEndereco(JsonObject endereco) {
