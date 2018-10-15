@@ -42,7 +42,7 @@ public class ReportsController {
         byte[] report = reportsService.generateListaAniversariantes(membros);
         ServletOutputStream outputStream = res.raw().getOutputStream();
         res.raw().setContentType("application/octet-stream");
-        res.raw().setHeader("Content-Disposition","attachment; filename=relatorioMembros.pdf");
+        res.raw().setHeader("Content-Disposition","attachment; filename=aniversariantes.xlsQue b");
         res.raw().getOutputStream().write(report);
         outputStream.flush();
         outputStream.close();
