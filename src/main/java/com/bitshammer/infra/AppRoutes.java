@@ -25,5 +25,7 @@ public class AppRoutes {
         before(jwtFilter::validateToken);
         get("/reports/juridico", reportsController::juridico);
         get("/reports/aniversariantes/nascimento", reportsController::nascimento);
+        get("/reports/aniversariantes/casamento", reportsController::casamento);
+
     }
 }

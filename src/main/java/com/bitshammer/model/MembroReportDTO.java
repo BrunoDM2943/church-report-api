@@ -19,6 +19,8 @@ import java.time.format.DateTimeFormatter;
         private String celular;
         private String email;
         private String classificacao;
+        private String conjuge;
+        private String cep;
 
         public String getDtNascimentoFmt() {
             return DateTimeFormatter.ofPattern("dd/MM/yyyy").format(dtNascimento);

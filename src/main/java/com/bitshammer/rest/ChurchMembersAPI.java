@@ -37,6 +37,8 @@ public class ChurchMembersAPI {
                         .dtNascimento(getDate(pessoa.get("dtNascimento").getAsString()))
                         .dtCasamento(getDate(pessoa.get("dtCasamento").getAsString()))
                         .endereco(getEndereco(endereco))
+                        .cep(getCep(endereco))
+                        .conjuge(getConjuge(pessoa))
                         .classificacao("")
                         .build());
             }
@@ -67,6 +69,10 @@ public class ChurchMembersAPI {
         return String.format("%s %s", pessoa.get("nome").getAsString(), pessoa.get("sobrenome").getAsString());
     }
 
+    private String getConjuge(JsonObject pessoa) {
+        return pessoa.get("nomeConjuge") != null ? pessoa.get("nomeConjuge").getAsString() : "" ;
+    }
+
     private LocalDate getDate(String date){
         if("0001-01-01T00:00:00Z".equalsIgnoreCase(date)){
             return null;
@@ -76,5 +82,9 @@ public class ChurchMembersAPI {
 
     private String getEndereco(JsonObject endereco) {
         return String.format("%s, %d - %s", endereco.get("logradouro").getAsString(), endereco.get("numero").getAsInt(), endereco.get("bairro").getAsString());
+    }
+
+    private String getCep(JsonObject endereco) {
+        return endereco.get("cep").getAsString();
     }
 }
