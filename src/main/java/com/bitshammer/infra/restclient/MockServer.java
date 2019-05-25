@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MockServer {
-    static final Map<String, String> MOCK = new HashMap<>();
+    static final Map<String, Response> MOCK = new HashMap<>();
 
     static boolean MOCK_SERVER = false;
 
@@ -16,11 +16,11 @@ public class MockServer {
         return MOCK.containsKey(method + ":" + call);
     }
 
-    static String getMockedResponse(String method, String call) {
+    static Response getMockedResponse(String method, String call) {
         return MOCK.get(method + ":" + call);
     }
 
-    public static void onPost(String call, String response) {
+    public static void onPost(String call, Response response) {
         MOCK.put("POST:" + call, response);
     }
 

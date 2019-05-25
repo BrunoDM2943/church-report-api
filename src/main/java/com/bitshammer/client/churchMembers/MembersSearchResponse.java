@@ -12,7 +12,7 @@ public class MembersSearchResponse {
     private Pessoa pessoa;
 
     @Data
-    private static class Pessoa {
+    public static class Pessoa {
         private String nome;
         private String conjuge;
         private LocalDate dtNascimento;
@@ -21,26 +21,15 @@ public class MembersSearchResponse {
         private Contato contato;
 
         @Data
-        private class Contato{
+        public class Contato{
             private String telefone;
             private String celular;
             private String email;
         }
 
         @Data
-        private static class Endereco {
+        public static class Endereco {
             private String endereco;
-        }
-
-        public String getDtNascimentoFmt() {
-            return DateTimeFormatter.ofPattern("dd/MM/yyyy").format(dtNascimento);
-        }
-
-        public String getDtCasamentoFmt() {
-            if(dtCasamento == null) {
-                return "";
-            }
-            return DateTimeFormatter.ofPattern("dd/MM/yyyy").format(dtCasamento);
         }
     }
 }

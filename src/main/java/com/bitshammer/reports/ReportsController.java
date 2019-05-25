@@ -1,66 +1,48 @@
 package com.bitshammer.reports;
 
-import com.bitshammer.client.churchMembers.MembersSearchResponse;
-import com.bitshammer.model.MembroReportDTO;
-import com.bitshammer.resports.jasper.JasperService;
-import com.bitshammer.client.churchMembers.ChurchMembersAPI;
-import spark.Request;
-import spark.Response;
-
-import javax.inject.Inject;
-import javax.inject.Singleton;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletResponse;
-import java.time.LocalDate;
-import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 
-@Singleton
+@RestController
 public class ReportsController {
 
-    @Inject
-    private ChurchMembersAPI churchMembersAPI;
+    @Autowired
+    ReportsService reportsService;
 
-    @Inject
-    private JasperService jasperService;
-
-    @Inject
-    private ReportsService reportsService;
-
-    public HttpServletResponse juridico(Request req, Response res) throws Exception {
-        List<MembersSearchResponse> membros = churchMembersAPI.getMembers();
-        byte[] report = jasperService.generateReport("reports/juridica.jrxml", membros);
-        ServletOutputStream outputStream = res.raw().getOutputStream();
-        res.raw().setContentType("application/octet-stream");
-        res.raw().setHeader("Content-Disposition","attachment; filename=relatorioMembros.pdf");
-        res.raw().getOutputStream().write(report);
-        outputStream.flush();
-        outputStream.close();
-        return res.raw();
+    @RequestMapping("/reports/members")
+    public ResponseEntity<Resource> juridico() throws Exception {
+        byte[] report = reportsService.generateMembersReport();
+        return ResponseEntity.ok()
+                .header("Content-Disposition","attachment")
+                .header("filename", "relatorioMembros.pdf")
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(new ByteArrayResource(report));
     }
 
-    public HttpServletResponse nascimento(Request req, Response res) throws Exception {
-        List<MembroReportDTO> membros = null;
-        byte[] report = reportsService.generateListaAniversariantes(membros);
-        ServletOutputStream outputStream = res.raw().getOutputStream();
-        res.raw().setContentType("application/octet-stream");
-        res.raw().setHeader("Content-Disposition","attachment; filename=aniversariantes.xls");
-        res.raw().getOutputStream().write(report);
-        outputStream.flush();
-        outputStream.close();
-        return res.raw();
+    @RequestMapping("/reports/aniversariantes/nascimento")
+    public ResponseEntity<Resource> nascimento() throws Exception {
+        byte[] report = reportsService.generateBirthdayList();
+        return ResponseEntity.ok()
+                .header("Content-Disposition","attachment")
+                .header("filename", "aniversariantes.xls")
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(new ByteArrayResource(report));
     }
 
-    public HttpServletResponse casamento(Request req, Response res) throws Exception {
-        List<MembroReportDTO> membros = null;
-        byte[] report = reportsService.generateListaAniversariantesCasamento(membros);
-        ServletOutputStream outputStream = res.raw().getOutputStream();
-        res.raw().setContentType("application/octet-stream");
-        res.raw().setHeader("Content-Disposition","attachment; filename=aniversariantesCasamento.xls");
-        res.raw().getOutputStream().write(report);
-        outputStream.flush();
-        outputStream.close();
-        return res.raw();
+    @RequestMapping("/reports/aniversariantes/casamento")
+    public ResponseEntity<Resource> casamento() throws Exception {
+        byte[] report = reportsService.generateMerrydayList();
+        return ResponseEntity.ok()
+                .header("Content-Disposition","attachment")
+                .header("filename", "aniversariantesCasamento.xls")
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(new ByteArrayResource(report));
     }
 
 

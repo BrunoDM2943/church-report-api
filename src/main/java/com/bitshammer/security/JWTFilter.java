@@ -4,49 +4,27 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.bitshammer.infra.restclient.RestCall;
+import com.bitshammer.infra.restclient.RESTClient;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import lombok.Data;
-import spark.Request;
-import spark.Response;
+import org.springframework.stereotype.Component;
 
-import javax.inject.Singleton;
+import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateFactory;
 import java.security.interfaces.RSAPublicKey;
 import java.util.List;
 
-import static spark.Spark.halt;
-
-@Singleton
-public class JWTFilter {
-
-
-    public void validateToken(Request request, Response response) throws Exception{
-        String tokenStr = request.headers("Authorization");
-        if(tokenStr == null) {
-            halt(403, "Unauthorized");
-        }
-        try {
-            tokenStr = tokenStr.split(" ")[1];
-            DecodedJWT token = JWT.decode(tokenStr);
-            RSAPublicKey publicKey = getPublicKey(token.getKeyId());
-            JWTVerifier verifier = JWT.require(Algorithm.RSA256(publicKey))
-                    .withAudience("https://church-members-api")
-                    .withIssuer("https://churchs.auth0.com/")
-                    .build(); //Reusable verifier instance
-            verifier.verify(tokenStr);
-
-        } catch (Exception e){
-            e.printStackTrace();
-            halt(403, "Unauthorized");
-        }
-    }
+@Component
+public class JWTFilter implements Filter {
 
     private RSAPublicKey getPublicKey(String keyId) throws Exception {
-        RestCall rest = new RestCall();
+        RESTClient rest = new RESTClient();
         String response = null;
         try {
             response = rest.get("https://churchs.auth0.com/.well-known/jwks.json");
@@ -66,6 +44,35 @@ public class JWTFilter {
             }
         }
         return null;
+
+    }
+
+    @Override
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+        String tokenStr = ((HttpServletRequest)request).getHeader("Authorization");
+        if(tokenStr == null) {
+            HttpServletResponse resp = (HttpServletResponse) response;
+            resp.reset();
+            resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return;
+        }
+        try {
+            tokenStr = tokenStr.split(" ")[1];
+            DecodedJWT token = JWT.decode(tokenStr);
+            RSAPublicKey publicKey = getPublicKey(token.getKeyId());
+            JWTVerifier verifier = JWT.require(Algorithm.RSA256(publicKey))
+                    .withAudience("https://church-members-api")
+                    .withIssuer("https://churchs.auth0.com/")
+                    .build(); //Reusable verifier instance
+            verifier.verify(tokenStr);
+        } catch (Exception e){
+            e.printStackTrace();
+            HttpServletResponse resp = (HttpServletResponse) response;
+            resp.reset();
+            resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return;
+        }
+        chain.doFilter(request, response);
 
     }
 
