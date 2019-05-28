@@ -33,7 +33,6 @@ public class TestReportsService {
     @Test
     public void TestGenerateMembersReportOK() throws Exception {
         List<MembersSearchResponse> members = new ArrayList<>();
-        ;
         IntStream.range(0, 100).forEach(i -> members.add(new MembersSearchResponse("Adulto",
                 MembersSearchResponse.Pessoa.builder()
                         .nome("Teste")
@@ -46,4 +45,5 @@ public class TestReportsService {
         byte[] bytes = reportsService.generateMembersReport();
         Assert.assertNotEquals(0, bytes.length);
     }
+
 }

@@ -58,7 +58,6 @@ public class ReportsService {
 
     }
 
-
     byte[] generateMerrydayList() throws IOException {
         List<MembersSearchResponse> members = churchMembersAPI.getMembers();
         Workbook wb = new HSSFWorkbook();
@@ -79,7 +78,6 @@ public class ReportsService {
         wb.write(byteArrayOutputStream);
         return byteArrayOutputStream.toByteArray();
     }
-
 
     private Map<Month, List<MembersSearchResponse>> generateMapMember(Collection<MembersSearchResponse> membros, Function<MembersSearchResponse, LocalDate> function) {
         Comparator<LocalDate> localDateComparator = Comparator.comparing(LocalDate::getMonth).thenComparing(LocalDate::getDayOfMonth);

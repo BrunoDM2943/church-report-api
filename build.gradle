@@ -8,6 +8,8 @@ version '1.0-SNAPSHOT'
 
 sourceCompatibility = 1.8
 apply plugin: 'io.spring.dependency-management'
+apply plugin: 'maven'
+apply plugin: 'jacoco'
 
 repositories {
     mavenCentral()
@@ -34,7 +36,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testCompile "org.mockito:mockito-core:2.+"
-
+    test.useTestNG()
 }
 
 test {
@@ -53,6 +55,25 @@ jar {
                 'Main-Class': 'com.bitshammer.SparkMain'
         )
     }
+}
+
+task codeCoverageReport(type: JacocoReport) {
+    executionData fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
+
+    subprojects.each {
+        sourceSets it.sourceSets.main
+    }
+
+    reports {
+        xml.enabled true
+        xml.destination "${buildDir}/reports/jacoco/report.xml"
+        html.enabled false
+        csv.enabled false
+    }
+}
+
+codeCoverageReport.dependsOn {
+    subprojects*.test
 }
 
 task stage(dependsOn: ['build', 'clean'])
