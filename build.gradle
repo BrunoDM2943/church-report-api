@@ -1,26 +1,27 @@
 plugins {
     id 'java'
+    id 'org.springframework.boot' version '2.1.5.RELEASE'
 }
 
 group 'com.bitshammer'
 version '1.0-SNAPSHOT'
 
 sourceCompatibility = 1.8
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'maven'
+apply plugin: 'jacoco'
 
 repositories {
     mavenCentral()
     maven{url "http://jasperreports.sourceforge.net/maven2/"}
     maven{url "http://jaspersoft.artifactoryonline.com/jaspersoft/third-party-ce-artifacts/"}
+    jcenter()
 }
 
 dependencies {
-    compile "com.sparkjava:spark-core:2.7.2"
-    compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.25'
-    compile 'org.jboss.weld.se:weld-se-shaded:3.0.5.Final'
-    compile 'javax.enterprise:cdi-api:2.0.SP1'
     compile "com.google.code.gson:gson:2.8.1"
     compile group: 'commons-codec', name: 'commons-codec', version: '1.5'
-    compile "com.fasterxml.jackson.core:jackson-databind:2.6.3"
+    
     compileOnly "org.projectlombok:lombok:1.16.10"
 
     compile ('net.sf.jasperreports:jasperreports:6.0.3') {
@@ -28,9 +29,21 @@ dependencies {
     }
     compile 'com.itextpdf:itextpdf:5.5.0'
     compile 'com.itextpdf:itext-pdfa:5.5.0'
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+
     compile 'com.auth0:java-jwt:3.4.0'
     compile group: 'org.apache.poi', name: 'poi', version: '3.9'
+    testImplementation('org.junit.jupiter:junit-jupiter:5.4.2')
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testCompile "org.mockito:mockito-core:2.+"
+    test.useTestNG()
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
 }
 
 jar {
@@ -42,6 +55,25 @@ jar {
                 'Main-Class': 'com.bitshammer.SparkMain'
         )
     }
+}
+
+task codeCoverageReport(type: JacocoReport) {
+    executionData fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
+
+    subprojects.each {
+        sourceSets it.sourceSets.main
+    }
+
+    reports {
+        xml.enabled true
+        xml.destination "${buildDir}/reports/jacoco/report.xml"
+        html.enabled false
+        csv.enabled false
+    }
+}
+
+codeCoverageReport.dependsOn {
+    subprojects*.test
 }
 
 task stage(dependsOn: ['build', 'clean'])

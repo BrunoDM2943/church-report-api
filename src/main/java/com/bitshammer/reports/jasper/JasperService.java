@@ -1,7 +1,8 @@
-package com.bitshammer.resports.jasper;
+package com.bitshammer.reports.jasper;
 
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Singleton;
 import java.io.InputStream;
@@ -9,10 +10,10 @@ import java.io.OutputStream;
 import java.util.Collection;
 import java.util.HashMap;
 
-@Singleton
+@Service
 public class JasperService {
 
-    public <T> byte[] generateReport(String fileName, Collection<T> data) throws JRException {
+    public <T> byte[] generateReport(String fileName, Collection<T> data) throws Exception {
         ClassLoader classloader = Thread.currentThread().getContextClassLoader();
         InputStream inputStream = classloader.getResourceAsStream(fileName);
         JasperReport jasperReport = JasperCompileManager.compileReport(inputStream);
