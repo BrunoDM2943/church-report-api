@@ -2,7 +2,6 @@ package com.bitshammer.infra.restclient;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import jdk.internal.util.xml.impl.Input;
 
 import javax.inject.Named;
 import java.io.*;

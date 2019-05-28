@@ -31,7 +31,7 @@ public class TestReportsService {
     private JasperService jasperService;
 
     @Test
-    public void testGenerateMembersReport() throws Exception {
+    public void TestGenerateMembersReportOK() throws Exception {
         List<MembersSearchResponse> members = new ArrayList<>();
         ;
         IntStream.range(0, 100).forEach(i -> members.add(new MembersSearchResponse("Adulto",
