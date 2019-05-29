@@ -52,6 +52,7 @@ public class ReportsService {
 
     byte[] generateMembersReport() throws Exception {
         List<MembersSearchResponse> members = churchMembersAPI.getMembers();
+        members.sort((o1, o2) -> o1.getPessoa().getNome().compareToIgnoreCase(o1.getPessoa().getNome()));
         return jasperService.generateReport("reports/juridica.jrxml", members.stream().map(
                 MembroReportDTO::fromAPI
         ).collect(Collectors.toList()));
