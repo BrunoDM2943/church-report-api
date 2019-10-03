@@ -119,13 +119,13 @@
 				<textFieldExpression><![CDATA[$F{celular}]]></textFieldExpression>
 			</textField>
 			<textField pattern="dd/MM/yy" isBlankWhenNull="true">
-				<reportElement x="160" y="44" width="114" height="20" uuid="0fc02bbc-49a2-4e26-81c1-15031323e28e"/>
-				<textElement verticalAlignment="Middle"/>
+				<reportElement x="160" y="44" width="88" height="20" uuid="0fc02bbc-49a2-4e26-81c1-15031323e28e"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{dtNascimentoFmt}]]></textFieldExpression>
 			</textField>
 			<textField pattern="dd/MM/yy" isBlankWhenNull="true">
 				<reportElement x="388" y="44" width="147" height="20" uuid="ab5f1acd-282a-48dd-8705-d09440ad2c77"/>
-				<textElement verticalAlignment="Middle"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{dtCasamentoFmt}]]></textFieldExpression>
 			</textField>
 			<staticText>
@@ -145,7 +145,7 @@
 				<text><![CDATA[Email:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="274" y="44" width="114" height="20" uuid="12d9ea70-3b03-4774-a3b4-c177dedd02b7">
+				<reportElement x="250" y="44" width="138" height="20" uuid="12d9ea70-3b03-4774-a3b4-c177dedd02b7">
 					<printWhenExpression><![CDATA[$F{dtCasamentoFmt} != null && !$F{dtCasamentoFmt}.isEmpty()]]></printWhenExpression>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
