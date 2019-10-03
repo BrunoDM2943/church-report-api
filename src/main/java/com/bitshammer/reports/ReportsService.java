@@ -15,6 +15,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.Month;
+import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.*;
@@ -50,13 +51,27 @@ public class ReportsService {
         return byteArrayOutputStream.toByteArray();
     }
 
+    byte[] generateMembersReportJurico() throws Exception {
+        List<MembersSearchResponse> members = churchMembersAPI.getMembers();
+        List<MembroReportDTO> dtoList = members.stream()
+                .filter(m -> {
+                    LocalDate birthDate = m.getPessoa().getDtNascimento();
+                    int age = Period.between(birthDate, LocalDate.now()).getYears();
+                    return age > 15;
+                })
+                .sorted((o1, o2) -> o1.getPessoa().getNome().compareToIgnoreCase(o2.getPessoa().getNome()))
+                .map(MembroReportDTO::fromAPI)
+                .collect(Collectors.toList());
+        return jasperService.generateReport("reports/juridica.jrxml", dtoList);
+    }
+
     byte[] generateMembersReport() throws Exception {
         List<MembersSearchResponse> members = churchMembersAPI.getMembers();
-        members.sort((o1, o2) -> o1.getPessoa().getNome().compareToIgnoreCase(o2.getPessoa().getNome()));
-        return jasperService.generateReport("reports/juridica.jrxml", members.stream().map(
-                MembroReportDTO::fromAPI
-        ).collect(Collectors.toList()));
-
+        List<MembroReportDTO> dtoList = members.stream()
+                .sorted((o1, o2) -> o1.getPessoa().getNome().compareToIgnoreCase(o2.getPessoa().getNome()))
+                .map(MembroReportDTO::fromAPI)
+                .collect(Collectors.toList());
+        return jasperService.generateReport("reports/juridica.jrxml", dtoList);
     }
 
     byte[] generateMerrydayList() throws IOException {

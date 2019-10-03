@@ -17,6 +17,16 @@ public class ReportsController {
 
     @RequestMapping("/reports/members")
     public ResponseEntity<Resource> juridico() throws Exception {
+        byte[] report = reportsService.generateMembersReportJurico();
+        return ResponseEntity.ok()
+                .header("Content-Disposition","attachment")
+                .header("filename", "relatorioMembros.pdf")
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(new ByteArrayResource(report));
+    }
+
+    @RequestMapping("/reports/members/full")
+    public ResponseEntity<Resource> full() throws Exception {
         byte[] report = reportsService.generateMembersReport();
         return ResponseEntity.ok()
                 .header("Content-Disposition","attachment")
